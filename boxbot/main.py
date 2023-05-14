@@ -1,4 +1,13 @@
+""""
+Main file of boxbot.
+"""
+
+
 def main():
+    """
+    Main function of boxbot.
+    :return:
+    """
     print("Start boxbot.")
 
 
