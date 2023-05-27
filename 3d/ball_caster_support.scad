@@ -1,0 +1,14 @@
+h=3;
+cube([10,h,50]);
+translate([10-h,0,0]){
+    cube([h,50,50]);
+}
+translate([10-h,50-h,0]){
+    cube([90,h,50]);
+}
+translate([100-h,0,0]){
+    cube([h,50,50]);
+}
+translate([100-h,0,0]){
+    cube([50,h,50]);
+}

@@ -1,13 +1,8 @@
-module rounded_square( width, radius_corner ) {
-	translate( [ radius_corner, radius_corner, 0 ] )
-		minkowski() {
-			square( width - 2 * radius_corner,center=true );
-			circle( radius_corner );
-		}
-}
-   
+$fn=100;
 
-module rcube(size, radius) {
+height_diff=300;
+ 
+ module rcube(size, radius) {
     hull() {
         translate([radius, radius]) cylinder(r = radius, h = size[2]);
         translate([size[0] - radius, radius]) cylinder(r = radius, h = size[2]);
@@ -16,115 +11,148 @@ module rcube(size, radius) {
     }
 }
 
-difference(){
-//cylinder(h=3, r=100, center=true, $fn=100);
+
+
+
+
+union(){
+
+    difference(){
+        
+        translate([-200,-200,0]){
+              rcube(size=[400,400,100],radius=10);
+        }
+            
+            
+
+
+        translate([0,0,103]){
+            cube(size=[396,396,200],center=true);
+        }
+
+
+        //sub wheel 1
+        translate([-170,0,0]){
+            cube(size=[20,100,height_diff],center=true);
+            
+            translate([16.4,15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true);
+            }
+            translate([54.8,15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true);
+            }
+
+            translate([16.4,-15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true);
+            }
+            translate([54.8,-15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true);
+            }
+            
+        }
+
+
+
+         
+        //sub wheel 2
+        translate([170,0,0]){
+            cube(size=[26,100,height_diff],center=true);
+            
+            translate([-16.4,15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true, $fn=100);
+            }
+            translate([-54.8,15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true, $fn=100);
+            }
+
+            translate([-16.4,-15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true, $fn=100);
+            }
+            translate([-54.8,-15.6,0]){ 
+               cylinder(h=height_diff, r=1.6, center=true, $fn=100);
+            }
+            
+        }
+
+
+
+
+
+        //spacer
+
+        translate([-193,193,0]){ 
+             cylinder(h=height_diff, r=1.6, center=true);
+        }
+
+        translate([193,193,0]){ 
+             cylinder(h=height_diff, r=1.6, center=true);
+        }
+
+        translate([193,-193,0]){ 
+             cylinder(h=height_diff, r=1.6, center=true);
+        }
+
+        translate([-193,-193,0]){ 
+             cylinder(h=height_diff, r=1.6, center=true);
+        }
+
+
+
+
+        // ball caster 1
+
+        translate([0,-140,0]){
+         cube(size=[90,90,height_diff],center=true);
+        }
+
+
+        // ball caster 2
+
+        translate([0,140,0]){
+         cube(size=[90,90,height_diff],center=true);
+        }
+
+
+
+
+
+        // power battery
+
+        translate([0,-33.5,0]){ 
+             cylinder(h=20, r=1.3, center=true, $fn=100);
+        }
+
+        translate([0,33.5,0]){ 
+             cylinder(h=20, r=1.3, center=true, $fn=100);
+        }
+
+
+
+
+
+        //cube(size=[200,200,20],center=true);
+
+        translate([-120,120,0]){
+         cube(size=[100,100,20],center=true);
+        }
+
+        //translate([35,0,0]){
+        // cube(size=[40,100,20],center=true);
+        //}
+
+    }
     
-//linear_extrude(3){
-// rounded_square(220,10);
-//}
-//cube(size=[200,200,3],center=true);
-translate([-100,-100,0]){
- rcube(size=[200,200,3],radius=10);
-}
-
-
-//sub wheel 1
-translate([-90,0,0]){
-    cube(size=[16,100,20],center=true);
+    difference(){
+        translate([-193.6,193.6,0]){
+           cylinder(h=100,r=5);
+        }
     
-    translate([16.4,15.6,0]){ 
-       cylinder(h=20, r=1.6, center=true, $fn=100);
-    }
-    translate([54.8,15.6,0]){ 
-       cylinder(h=20, r=1.6, center=true, $fn=100);
-    }
-
-    translate([16.4,-15.6,0]){ 
-       cylinder(h=20, r=1.6, center=true, $fn=100);
-    }
-    translate([54.8,-15.6,0]){ 
-       cylinder(h=20, r=1.6, center=true, $fn=100);
+       translate([-193,193,0]){ 
+             cylinder(h=height_diff, r=2.6, center=true);
+        }
+    
     }
     
-}
-
-
-
- 
-translate([100,0,0]){
-    cube(size=[30,40,20],center=true);
-
-    translate([-28.05,9,0]){ 
-       cylinder(h=20, r=1.3, center=true, $fn=100);
-    }
-
-    translate([-28.05,-9,0]){ 
-       cylinder(h=20, r=1.3, center=true, $fn=100);
-    }     
-}
-
-
-
-// ballcaster
-
-translate([0,-90,0]){
     
-
-    translate([0,14.5,0]){ 
-       cylinder(h=20, r=1.3, center=true, $fn=100);
-    }
-
-    translate([0,1,0]){ 
-       cylinder(h=20, r=1.3, center=true, $fn=100);
-    }     
-}
-
-
-
-
-
-//spacer
-
-translate([65,65,0]){ 
-     cylinder(h=20, r=1.6, center=true, $fn=100);
-}
-
-translate([65,-65,0]){ 
-     cylinder(h=20, r=1.6, center=true, $fn=100);
-}
-
-translate([-65,-65,0]){ 
-     cylinder(h=20, r=1.6, center=true, $fn=100);
-}
-
-translate([-65,65,0]){ 
-     cylinder(h=20, r=1.6, center=true, $fn=100);
-}
-
-
-
-// power battery
-
-translate([0,-33.5,0]){ 
-     cylinder(h=20, r=1.3, center=true, $fn=100);
-}
-
-translate([0,33.5,0]){ 
-     cylinder(h=20, r=1.3, center=true, $fn=100);
-}
-
-
-
-
-
-//cube(size=[100,40,20],center=true);
-
-//translate([-35,0,0]){
-// cube(size=[40,100,20],center=true);
-//}
-
-//translate([35,0,0]){
-// cube(size=[40,100,20],center=true);
-//}
-
+    
 }
