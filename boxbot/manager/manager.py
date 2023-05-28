@@ -1,12 +1,16 @@
-import zmq
+import importlib
 import os
+from multiprocessing import Process
+
+import zmq
+from setproctitle import setproctitle
 
 
 class Manager:
     managed_process = {
-        "vision": "boxbot.vision.vision",
-        "sensor": "boxbot.sensor.sensor",
-        #"planing": "boxbot.planing.plan",
+        "boxbot_controller": "boxbot.controller.controller",
+        "boxbot_board": "boxbot.board.board",
+        # "planing": "boxbot.planing.plan",
     }
 
     running = {}
@@ -21,11 +25,45 @@ class Manager:
 
         if os.getenv("NO_PROCESS_MANAGER") is None:
             for process_name in self.managed_process:
-                self._launch(process_name)
+                print("Launch process: " + process_name)
+
+                process = Process(name=process_name, target=_launch,
+                                  args=(process_name, self.managed_process[process_name]))
+
+                process.start()
+
+                self.running[process_name] = process
+
         else:
             print("No process manager started.")
 
-    def _launch(self, process_name):
-        print("Launch process: " + process_name)
 
-        self.running[process_name] = "1"
+def _launch(process_name, process_path):
+    try:
+
+        # import the process
+        mod = importlib.import_module(process_path)
+
+        # rename the process
+        setproctitle(process_name)
+
+        # exec the process
+        mod.main()
+    except KeyboardInterrupt:
+        # cloudlog.info("child %s got ctrl-c" % proc)
+        pass
+    except Exception:
+        # can't install the crash handler becuase sys.excepthook doesn't play nice
+        # with threads, so catch it here.
+        # crash.capture_exception()
+        raise
+
+
+def main():
+    """
+    Manager.
+    :return:
+    """
+
+    manager = Manager()
+    manager.start()
