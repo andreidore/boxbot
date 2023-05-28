@@ -14,11 +14,9 @@ def main():
     """
     print("Start boxbot.")
 
-    if os.getenv("NO_MANAGER") is None:
-        manager = Manager()
-        manager.start()
-    else:
-        print("No manager started.")
+    manager = Manager()
+    manager.start()
+
 
 
 if __name__ == '__main__':

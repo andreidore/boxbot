@@ -1,11 +1,12 @@
 import zmq
+import os
 
 
 class Manager:
     managed_process = {
         "vision": "boxbot.vision.vision",
         "sensor": "boxbot.sensor.sensor",
-        "planing": "boxbot.planing.plan",
+        #"planing": "boxbot.planing.plan",
     }
 
     running = {}
@@ -18,8 +19,11 @@ class Manager:
     def start(self):
         print("Start manager")
 
-        for process_name in self.managed_process:
-            self._launch(process_name)
+        if os.getenv("NO_PROCESS_MANAGER") is None:
+            for process_name in self.managed_process:
+                self._launch(process_name)
+        else:
+            print("No process manager started.")
 
     def _launch(self, process_name):
         print("Launch process: " + process_name)
