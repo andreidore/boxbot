@@ -2,10 +2,9 @@
 Main file of boxbot.
 """
 
-import cv2
+import os
 
-from camera.camera import Camera
-from landmark.aruco import ArucoManager
+from manager.manager import Manager
 
 
 def main():
@@ -15,20 +14,11 @@ def main():
     """
     print("Start boxbot.")
 
-    # init Camera
-    camera = Camera()
-
-    # init ArucoManager
-    aruco_manager = ArucoManager()
-
-    while True:
-        frame = camera.get_frame()
-
-        aruco_frame = aruco_manager.update(frame)
-
-        cv2.imshow('frame', aruco_frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+    if os.getenv("NO_MANAGER") is None:
+        manager = Manager()
+        manager.start()
+    else:
+        print("No manager started.")
 
 
 if __name__ == '__main__':

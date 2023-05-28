@@ -1,4 +1,0 @@
-<launch>
-    <node pkg="boxbot_main" exec="main" name="boxbot_main">
-    </node>
-</launch>
