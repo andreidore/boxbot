@@ -10,6 +10,7 @@ class Manager:
     managed_process = {
         "boxbot_controller": "boxbot.controller.controller",
         "boxbot_board": "boxbot.board.board",
+        "boxbot_navigation": "boxbot.navigation.navigation",
         # "planing": "boxbot.planing.plan",
     }
 

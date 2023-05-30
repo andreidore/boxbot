@@ -2,9 +2,7 @@ import time
 
 import zmq
 
-from boxbot import config
-
-BOARD_ZMQ_PORT = "5001"
+from boxbot.config import BOARD_ZMQ_PORT, ZMQ_HOST
 
 
 class Board():
@@ -15,7 +13,7 @@ class Board():
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.PUB)
 
-        self.socket.bind("tcp://{}:{}".format(config.ZMQ_HOST, BOARD_ZMQ_PORT))
+        self.socket.bind("tcp://{}:{}".format(ZMQ_HOST, BOARD_ZMQ_PORT))
 
     def start(self):
         print("Start board.")
