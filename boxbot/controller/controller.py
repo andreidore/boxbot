@@ -2,7 +2,7 @@ import time
 
 import zmq
 
-from boxbot.config import BOARD_ZMQ_PORT, ZMQ_HOST
+from boxbot.config import BOARD_ZMQ_PORT, COMMAND_ZMQ_PORT, ZMQ_HOST
 from boxbot.controller.state.idle import IdleState
 from boxbot.fsm.fsm import FiniteStateMachine
 
@@ -18,6 +18,9 @@ class Controller():
         self.board_socket.connect("tcp://{}:{}".format(ZMQ_HOST, BOARD_ZMQ_PORT))
         self.board_socket.subscribe("")
 
+        self.command_socket = self.context.socket(zmq.REP)  # REP stands for REPly, to represent a server
+        self.command_socket.bind(f"tcp://{ZMQ_HOST}:{COMMAND_ZMQ_PORT}")  # Bin
+
         self.fsm = FiniteStateMachine(IdleState())
 
     def start(self):
@@ -27,9 +30,19 @@ class Controller():
             # message = self.board_socket.recv_string()
             # print("Message: " + message)
 
+            ## command
+            try:
+                command_message = self.command_socket.recv_string(zmq.NOBLOCK)
+                self.command_socket.send_string("ACK")
+
+                print(command_message)
+            except zmq.Again:
+                #print("No command received")
+                pass
+
             self.fsm.update()
 
-            time.sleep(1.0)
+            time.sleep(0.1)
 
 
 def main():
