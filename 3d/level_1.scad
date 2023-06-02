@@ -20,6 +20,25 @@ module l_bracket(){
 }
 
 
+module ballcaster(){
+    
+    translate([-29/2,29/2,0]){ 
+            cylinder(h=height_diff, r=2.6, center=true);
+    }
+    translate([29/2,29/2,0]){ 
+        cylinder(h=height_diff, r=2.6, center=true);
+    }
+    translate([29/2,-29/2,0]){ 
+        cylinder(h=height_diff, r=2.6, center=true);
+    }
+    translate([-29/2,-29/2,0]){ 
+        cylinder(h=height_diff, r=2.6, center=true);
+    }
+    
+    
+}
+
+
 
 difference(){
     
@@ -63,11 +82,14 @@ difference(){
 
 
 
-    // ball caster 1
+    //ball caster 1
 
-    //translate([0,-140,0]){
-    // cube(size=[90,90,height_diff],center=true);
-    //}
+    translate([-150,150,0]){
+        ballcaster();
+        
+                  
+        
+    }
 
 
     // ball caster 2
@@ -80,7 +102,7 @@ difference(){
     // frame
     // 1 1
     translate([-200,200,0]){
-        cube(size=[30,30,height_diff],center=true);
+        cube(size=[40,40,height_diff],center=true);
     }
     
     
