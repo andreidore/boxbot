@@ -4,3 +4,4 @@ pyzmq==25.1.0
 setproctitle==1.3.2
 py-trees==2.2.3
 filterpy==1.4.5
+ultralytics==8.0.112; sys_platform == 'darwin'

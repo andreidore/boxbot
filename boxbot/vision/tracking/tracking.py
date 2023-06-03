@@ -10,7 +10,7 @@ def main():
     R_std = 5
     dt = 1.
 
-    filter.x = np.zeros((2,1))
+    filter.x = np.array([-10,0])
     filter.P = np.eye(2) * 500
     filter.R = np.eye(1) * R_std
     filter.Q = Q_discrete_white_noise(dim=2, dt=dt, var=Q_std)

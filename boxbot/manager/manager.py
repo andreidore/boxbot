@@ -11,6 +11,7 @@ class Manager:
         "boxbot_controller": "boxbot.controller.controller",
         "boxbot_board": "boxbot.board.board",
         "boxbot_navigation": "boxbot.navigation.navigation",
+        "boxbot_vision": "boxbot.vision.vision",
         # "planing": "boxbot.planing.plan",
     }
 

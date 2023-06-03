@@ -4,3 +4,10 @@
 /boxbot/install/
 /boxbot/build/
 /boxbot/log/
+
+
+# models
+yolov8s.pt
+runs/
+
+
