@@ -20,8 +20,8 @@ class YOLO8Detector(Detector):
             List[Object]: The objects detected in the image.
         """
 
-        results = self.model.predict(source=image, save=True, save_txt=True)  # save predictions as labels
+        results = self.model.predict(source=image, save=False, save_txt=False,verbose=False)  # save predictions as labels
 
-        print(results)
+        #print(results)
 
         return []
