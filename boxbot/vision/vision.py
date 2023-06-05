@@ -7,7 +7,7 @@ import zmq
 from boxbot.config import VISION_ENDPOINT
 
 
-class Vision(object):
+class Vision():
     CAMERA_IMAGE_SIZE = (1280, 1024)
 
     def __init__(self):
@@ -25,7 +25,7 @@ class Vision(object):
             from boxbot.vision.detector.tensort_detector import TensortDetector
             self.detector = TensortDetector()
 
-        print("Publishing to {}".format(VISION_ENDPOINT))
+        print(f"Publishing to {VISION_ENDPOINT}")
         self.context = zmq.Context()
         self.vision_socket = self.context.socket(zmq.PUB)
         self.vision_socket.bind(VISION_ENDPOINT)
@@ -34,7 +34,7 @@ class Vision(object):
         print("Vision start")
 
         while True:
-            ret, frame = self.capture.read()
+            _, frame = self.capture.read()
 
             detector_results = self.detector.detect(frame)
 

@@ -1,4 +1,16 @@
+"""
+Defines the Detector class.
+
+
+"""
+
+
 class Detector:
+    """
+    Detects objects in an image.
+
+    """
+
     def __init__(self):
         pass
 
@@ -13,7 +25,3 @@ class Detector:
             List[Object]: The objects detected in the image.
         """
         raise NotImplementedError()
-
-
-
-    

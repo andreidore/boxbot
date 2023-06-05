@@ -5,7 +5,7 @@ Main file of boxbot.
 from setproctitle import setproctitle
 
 from boxbot.config import __VERSION__
-from manager.manager import main as manager_main
+from boxbot.manager.manager import main as manager_main
 
 
 def main():
