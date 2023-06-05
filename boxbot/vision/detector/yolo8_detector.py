@@ -20,8 +20,27 @@ class YOLO8Detector(Detector):
             List[Object]: The objects detected in the image.
         """
 
-        results = self.model.predict(source=image, save=False, save_txt=False,verbose=False)  # save predictions as labels
+        results = self.model.predict(source=image, save=False, save_txt=False,
+                                     verbose=False)  # save predictions as labels
 
-        #print(results)
+        if len(results) == 0:
+            return {}
 
-        return []
+        result = results[0]
+        detection_frame = result.plot()
+
+        for i, box in enumerate(result.boxes):
+
+            # detect only persons
+            if box.cls != 0:
+                continue
+
+            # print(box.data)
+
+        detector_result = {"detection_frame": detection_frame}
+
+        # print(boxes)
+
+        # print(results)
+
+        return detector_result

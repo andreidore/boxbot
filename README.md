@@ -3,6 +3,17 @@
 
 
 
+# TODO
+
+* tracking peoples in video
+* depth estimation in vides
+* odmetry wheel
+* odmetry imu
+* tracking robot in 2D
+* fusion odometry and tracking
+* localization robot in 2D
+* map
+
 ## Video
 
 [Video](https://www.youtube.com/playlist?list=PL9R1KWUmB2sIsCGWAkmOY2wdL_8whw-2E)
