@@ -6,7 +6,7 @@ from boxbot.vision.detector.detector import Detector
 class YOLO8Detector(Detector):
     def __init__(self):
         super().__init__()
-        print("Dev detector init")
+        print("Yolo8 detector init")
         self.model = YOLO("yolov8s.pt")
 
     def detect(self, image):
@@ -29,15 +29,19 @@ class YOLO8Detector(Detector):
         result = results[0]
         detection_frame = result.plot()
 
+        bbs = []
+
         for i, box in enumerate(result.boxes):
 
             # detect only persons
             if box.cls != 0:
                 continue
 
+            bbs.append(box.data[0])
             # print(box.data)
 
-        detector_result = {"detection_frame": detection_frame}
+        detector_result = {"detection_frame": detection_frame,
+                           "bbs": bbs}
 
         # print(boxes)
 

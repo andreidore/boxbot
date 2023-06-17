@@ -1,10 +1,10 @@
 from boxbot.vision.detector.detector import Detector
 
 
-class TensortDetector(Detector):
+class TensorRTDetector(Detector):
     def __init__(self):
         super().__init__()
-        print("Tensort detector init")
+        print("TensorRT detector init")
 
     def detect(self, image):
         """

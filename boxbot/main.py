@@ -1,6 +1,7 @@
 """"
 Main file of boxbot.
 """
+import os
 
 from setproctitle import setproctitle
 
@@ -16,6 +17,7 @@ def main():
     setproctitle("boxbot_manager")
 
     print("Start boxbot.")
+    print("ENV:", os.getenv("ENV", "PROD"))
     print(f"Version: {__VERSION__}")
 
     # start manager

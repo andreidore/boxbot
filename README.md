@@ -29,3 +29,12 @@
 Tracking
 
 [Tracking](https://www.youtube.com/watch?v=IyIAGKBt-jc)
+
+
+Fusion
+
+[IMU Fusion](https://github.com/xiaozhengxu/CompRobo_IMU_Sensor_fusion)
+
+
+Filter
+[Filter Book](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/)

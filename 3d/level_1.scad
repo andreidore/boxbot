@@ -84,11 +84,10 @@ difference(){
 
     //ball caster 1
 
-    translate([-150,150,0]){
+    translate([-150,145,0]){
         ballcaster();
         
                   
-        
     }
 
 
@@ -121,6 +120,19 @@ difference(){
     translate([-150,190,0]){
         cylinder(h=height_diff, r=2.6, center=true, $fn=100);
     }
+    
+    
+    translate([-10,150,0]){
+        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    }
+    
+    translate([-10,50,0]){
+        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    }
+    
+    
+    
+    //---------
      
     
     

@@ -37,7 +37,7 @@ def main():
         # cv2.waitKey(1)
         # print("a2")
 
-        event, values = window.read(timeout=20)
+        event, values = window.read(timeout=1)
         # End program if user closes window or
         # presses the OK button
         if event == "OK" or event == sg.WIN_CLOSED:
