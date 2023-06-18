@@ -38,3 +38,13 @@ Fusion
 
 Filter
 [Filter Book](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/)
+
+
+
+Jetson 
+
+[Jetson inference](https://github.com/dusty-nv/jetson-inference)
+
+
+OpenCV
+[Opencv](https://qengineering.eu/install-opencv-4.5-on-jetson-nano.html)

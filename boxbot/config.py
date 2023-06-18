@@ -16,3 +16,9 @@ NAVIGATION_ZMQ_PORT = "5002"
 VISION_ENDPOINT = "tcp://{}:5004".format(ZMQ_HOST, VISION_ZMQ_PORT)
 
 
+
+
+## camera
+
+CAMERA_URI="v4l2:///dev/video0"
+
