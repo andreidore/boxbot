@@ -76,7 +76,7 @@ class Vision():
                         'framerate': 30, 
                     })
 
-            self.video_output_raw=videoOutput("webrtc://@:8554/input")
+            self.video_output_detect=videoOutput("webrtc://@:8554/detect")
             self.video_output_depth=videoOutput("webrtc://@:8554/depth")
 
             print("Load detection models")
@@ -98,11 +98,6 @@ class Vision():
 
                 #print(frame) 
 
-                #detections = self.detections.Detect(frame, overlay="box")
-
-                #for detection in detections:
-                #    print(detection)
-
                 self.buffers.Alloc(frame.shape,frame.format)
 
                 self.depth.Process(frame,self.buffers.depth, "viridis-inverted", "linear")
@@ -117,8 +112,17 @@ class Vision():
                 #print(self.depth_field_numpy[0])
 
 
-                self.video_output_raw.Render(self.buffers.composite)
-                self.video_output_depth.Render(frame)
+                self.video_output_depth.Render(self.buffers.composite)
+                
+                detections = self.detections.Detect(frame, overlay="box")
+
+                #for detection in detections:
+                #    print(detection)
+
+
+                
+                
+                self.video_output_detect.Render(frame)
 
             
 
