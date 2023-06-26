@@ -5,14 +5,14 @@ height_diff=300;
  
 module l_bracket(){
     
-    for ( i = [0 : 5] ){    
-        translate([30+i*8.4,15.6,0]){ 
+    for ( i = [0 : 6] ){    
+        translate([28+i*6.4,15.6,0]){ 
             cylinder(h=height_diff, r=1.6, center=true);
         }    
      }
      
-     for ( i = [0 : 5] ){    
-        translate([30+i*8.4,-15.6,0]){ 
+     for ( i = [0 : 6] ){    
+        translate([28+i*6.4,-15.6,0]){ 
             cylinder(h=height_diff, r=1.6, center=true);
         }    
      }
@@ -50,7 +50,7 @@ difference(){
     //sub wheel 1
     translate([-160,0,0]){
         
-        cube(size=[40,130,height_diff],center=true);
+        cube(size=[40,160,height_diff],center=true);
         
         l_bracket();
         
@@ -105,7 +105,7 @@ difference(){
     }
     
     
-    translate([-190,150,0]){
+    translate([-190,152,0]){
         cylinder(h=height_diff, r=2.6, center=true, $fn=100);
     }
     
@@ -117,7 +117,7 @@ difference(){
         cylinder(h=height_diff, r=2.6, center=true, $fn=100);
     }
     
-    translate([-150,190,0]){
+    translate([-152,190,0]){
         cylinder(h=height_diff, r=2.6, center=true, $fn=100);
     }
     
