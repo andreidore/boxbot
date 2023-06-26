@@ -1,0 +1,78 @@
+<!doctype html>
+
+<html>
+  <head>
+    
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+        
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <link rel="stylesheet" href="/static/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script type='text/javascript' src='https://webrtc.github.io/adapter/adapter-latest.js'></script>
+    <script type='text/javascript' src='/static/webrtc.js'></script>
+    <script type='text/javascript' src='/static/rest.js'></script>
+    <script type='text/javascript' src='/static/debounce.js'></script>
+    <script type='text/javascript' src="/static/jquery-3.6.3.min.js"></script>
+    <script type='text/javascript' src='/static/bootstrap.bundle.min.js'></script>
+    <script type='text/javascript'>
+      play = function() {
+        playStream(getWebsocketURL('input'), document.getElementById('video-player'));
+      };
+      
+      send = function() {
+        if( sendStream(getWebsocketURL('input'), document.getElementById('send-stream').value) )
+          play(); // autoplay browser stream
+      }
+      
+      window.onload = function() {
+        //var playStream = document.getElementById('play-stream');
+        //var sendStream = document.getElementById('send-stream');
+        //var sendButton = document.getElementById('send-button');
+
+
+       
+
+	playStream(getWebsocketURL('detect'), document.getElementById('video-player-detect'));      
+	//playStream(getWebsocketURL('detect'), document.getElementById('video-player-depth'));
+       // playStream.value = getWebsocketURL('input');
+    
+        // auto-play other sources, since they're already running
+        //play();
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">{{ title }}</a>
+      <!--
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-menu-items">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="https://github.com/dusty-nv/jetson-inference" target="_blank">Help</a>
+            </li>
+          </ul>
+        </div>
+      -->
+      </div>
+    </nav>
+    
+    <!-- Video Player -->
+    <div style=" z-index: 999;">
+      <video id="video-player-detect" autoplay controls playsinline muted>Your browser does not support video</video>
+    </div>
+    <div style=" 0px; z-index: 999;">
+      <video id="video-player-depth" autoplay controls playsinline muted>Your browser does not support video</video>
+    </div>
+    
+
+  
+  </body>
+</html>

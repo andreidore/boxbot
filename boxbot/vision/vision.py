@@ -3,9 +3,47 @@ import pickle
 
 import cv2
 import zmq
-from deep_sort_realtime.deepsort_tracker import DeepSort
+#from deep_sort_realtime.deepsort_tracker import DeepSort
 
-from boxbot.config import VISION_ENDPOINT
+
+from jetson_inference import detectNet, depthNet
+from jetson_utils import videoSource, videoOutput, cudaResize,  cudaToNumpy, cudaDeviceSynchronize, cudaOverlay, cudaConvertColor, cudaAllocMapped
+
+from boxbot.config import VISION_ENDPOINT,CAMERA_URI
+
+from boxbot.vision.depth_utils import depthBuffers
+
+
+
+def convert_color(img, output_format):
+	converted_img = cudaAllocMapped(width=img.width, height=img.height, format=output_format)
+	cudaConvertColor(img, converted_img)
+	return converted_img
+
+
+def crop(img, crop_factor):
+	crop_border = ((1.0 - crop_factor[0]) * 0.5 * img.width,
+				(1.0 - crop_factor[1]) * 0.5 * img.height)
+
+	crop_roi = (crop_border[0], crop_border[1], img.width - crop_border[0], img.height - crop_border[1])
+
+	crop_img = cudaAllocMapped(width=img.width * crop_factor[0],
+							   height=img.height * crop_factor[1],
+							   format=img.format)
+
+	cudaCrop(img, crop_img, crop_roi)
+	return crop_img
+
+
+# resize an image
+def resize(img, resize_factor):
+	resized_img = cudaAllocMapped(width=img.width * resize_factor[0],
+								  height=img.height * resize_factor[1],
+                                  format=img.format)
+
+	cudaResize(img, resized_img)
+	return resized_img
+
 
 
 class Vision():
@@ -15,28 +53,8 @@ class Vision():
     def __init__(self):
         print("Vision init")
 
-        self.capture = cv2.VideoCapture(0)
+        #self.tracker = DeepSort(max_age=5)
 
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.CAMERA_IMAGE_SIZE[0])
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.CAMERA_IMAGE_SIZE[1])
-
-        if os.getenv("ENV") == "DEV":
-            from boxbot.vision.detector.yolo8_detector import YOLO8Detector
-            self.detector = YOLO8Detector()
-            from boxbot.vision.extractor.timm_extractor import TimmExtractor
-            self.extractor = TimmExtractor()
-        else:
-            from boxbot.vision.detector.tensorrt_detector import TensorRTDetector
-            self.detector = TensorRTDetector()
-            from boxbot.vision.extractor.tensorrt_extractor import TensorRTExtractor
-            self.extractor = TensorRTExtractor()
-
-        self.tracker = DeepSort(max_age=5)
-
-        print(f"Publishing to {VISION_ENDPOINT}")
-        self.context = zmq.Context()
-        self.vision_socket = self.context.socket(zmq.PUB)
-        self.vision_socket.bind(VISION_ENDPOINT)
 
         self.publish_frame = True
         self.publish_detection_bbs = True
@@ -44,35 +62,84 @@ class Vision():
 
     def start(self):
         print("Vision start")
+ 
+        try: 
+            print(f"Publishing to {VISION_ENDPOINT}")
+            self.context = zmq.Context()
+            self.vision_socket = self.context.socket(zmq.PUB)
+            self.vision_socket.bind(VISION_ENDPOINT)
 
-        while True:
-            _, frame = self.capture.read()
 
-            frame = cv2.resize(frame, self.IMAGE_SIZE)
+            self.video_input=videoSource(CAMERA_URI,options={
+                        'width': 640,
+                        'height': 480,
+                        'framerate': 30, 
+                    })
 
-            detector_results = self.detector.detect(frame)
-            # detector_results = {}
+            self.video_output_detect=videoOutput("webrtc://@:8554/detect")
+            self.video_output_depth=videoOutput("webrtc://@:8554/depth")
 
-            vision_message = {}
+            print("Load detection models")
+            self.detections = detectNet("ssd-mobilenet-v2")
 
-            if self.publish_frame:
-                vision_message["frame"] = frame
+            print("Load depth models")
+            self.depth=net = depthNet("fcn-mobilenet")
+            self.buffers=depthBuffers()
+            #self.depth_field_numpy=cudaToNumpy(self.depth_field)
 
-            if self.publish_detection_frame:
-                vision_message["detection_frame"] = detector_results["detection_frame"]
+        
+            while True:
+            
+                frame = self.video_input.Capture(format="rgb8", timeout=1000)
 
-            detection_bbs = detector_results["bbs"]
+                if frame is None:
+                    print("No camera")
+                    continue
 
-            object_chips = self.chipper(frame, detection_bbs)
-            embeddings = self.embedder(object_chips)
-            #vision_message["frame"] = bbs_frame[0]
+                #print(frame) 
 
-            # print(detection_bbs)
+                self.buffers.Alloc(frame.shape,frame.format)
 
-            # TODO use a better serialization method
-            message_bytes = pickle.dumps(vision_message)
+                self.depth.Process(frame,self.buffers.depth, "viridis-inverted", "linear")
 
-            self.vision_socket.send(message_bytes)
+                #depth=resize(self.depth_field,(640,480))
+
+                #depth_gray=convert_color(self.depth_field, "rgb8")
+
+                cudaOverlay(self.buffers.depth,self.buffers.composite,0,0)
+
+                cudaDeviceSynchronize()
+                #print(self.depth_field_numpy[0])
+
+
+                self.video_output_depth.Render(self.buffers.composite)
+                
+                detections = self.detections.Detect(frame, overlay="box")
+
+                #for detection in detections:
+                #    print(detection)
+
+
+                
+                
+                self.video_output_detect.Render(frame)
+
+            
+
+                #object_chips = self.chipper(frame, detection_bbs)
+                #embeddings = self.embedder(object_chips)
+                #vision_message["frame"] = bbs_frame[0]
+
+                # print(detection_bbs)
+
+                # TODO use a better serialization method
+                #message_bytes = pickle.dumps(vision_message)
+
+                #self.vision_socket.send(message_bytes)
+
+        finally:
+            print("Destroy vision")
+            self.context.destroy()
 
     @staticmethod
     def chipper(frame, bbs):
