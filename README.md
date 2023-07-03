@@ -48,3 +48,8 @@ Jetson
 
 OpenCV
 [Opencv](https://qengineering.eu/install-opencv-4.5-on-jetson-nano.html)
+
+
+NN
+
+https://sachamorin.github.io/dino/
