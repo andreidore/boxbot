@@ -53,3 +53,5 @@ OpenCV
 NN
 
 https://sachamorin.github.io/dino/
+
+https://arxiv.org/abs/2212.00922?fbclid=IwAR1FNbWhv0eS54H0YUtXHaXThixjC0lq72ID0lv3dlZSrWjm-NRWSryoZ58
