@@ -46,6 +46,9 @@ Jetson
 [Jetson inference](https://github.com/dusty-nv/jetson-inference)
 
 
+[Robotics Python](https://github.com/AtsushiSakai/PythonRobotics)
+
+
 OpenCV
 [Opencv](https://qengineering.eu/install-opencv-4.5-on-jetson-nano.html)
 
