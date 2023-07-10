@@ -6,13 +6,13 @@ height_diff=300;
 module l_bracket(){
     
     for ( i = [0 : 6] ){    
-        translate([28+i*6.4,15.6,0]){ 
+        translate([8.4+i*6.4,15.6,0]){ 
             cylinder(h=height_diff, r=1.6, center=true);
         }    
      }
      
      for ( i = [0 : 6] ){    
-        translate([28+i*6.4,-15.6,0]){ 
+        translate([8.4+i*6.4,-15.6,0]){ 
             cylinder(h=height_diff, r=1.6, center=true);
         }    
      }
@@ -39,6 +39,20 @@ module ballcaster(){
 }
 
 
+module segment(){
+    
+    translate([50,0,0]){
+        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    }
+    
+    translate([152,0,0]){
+        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    }
+    
+    
+}
+
+
 
 difference(){
     
@@ -47,36 +61,27 @@ difference(){
     }
         
         
-    //sub wheel 1
+    //wheel 1
     translate([-160,0,0]){
-        
         cube(size=[40,160,height_diff],center=true);
-        
+    }
+    
+    translate([-140,0,0]){
         l_bracket();
-        
     }
 
+
+    
 
 
      
     //sub wheel 2
-    translate([170,0,0]){
-        cube(size=[26,100,height_diff],center=true);
-        
-        translate([-16.4,15.6,0]){ 
-           cylinder(h=height_diff, r=1.6, center=true, $fn=100);
-        }
-        translate([-54.8,15.6,0]){ 
-           cylinder(h=height_diff, r=1.6, center=true, $fn=100);
-        }
-
-        translate([-16.4,-15.6,0]){ 
-           cylinder(h=height_diff, r=1.6, center=true, $fn=100);
-        }
-        translate([-54.8,-15.6,0]){ 
-           cylinder(h=height_diff, r=1.6, center=true, $fn=100);
-        }
-        
+    translate([160,0,0]){
+        cube(size=[40,160,height_diff],center=true);
+    }
+    
+    translate([140-53.2,0,0]){
+        l_bracket();
     }
 
 
@@ -85,56 +90,128 @@ difference(){
     //ball caster 1
 
     translate([-150,145,0]){
-        ballcaster();
-        
-                  
+        ballcaster();       
     }
 
 
     // ball caster 2
-
-    //translate([0,140,0]){
-    // cube(size=[90,90,height_diff],center=true);
-    //}
+    translate([150,145,0]){
+        ballcaster();       
+    }
     
+    // ball caster 3
+    translate([150,-145,0]){
+        ballcaster();       
+    }
     
-    // frame
-    // 1 1
-    translate([-200,200,0]){
-        cube(size=[40,40,height_diff],center=true);
+     // ball caster 4
+    translate([-150,-145,0]){
+        ballcaster();       
     }
     
     
-    translate([-190,152,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
-    }
-    
-    translate([-190,50,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
-    }
-    
-    translate([-50,190,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
-    }
-    
-    translate([-152,190,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    // frame screws
+    // 1
+   
+    translate([-190,190,0]){
+        segment();
     }
     
     
-    translate([-10,150,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+    
+    translate([-190,0,0]){
+        rotate([0,0, 90]){
+           segment();
+        }
     }
     
-    translate([-10,50,0]){
-        cylinder(h=height_diff, r=2.6, center=true, $fn=100);
+     translate([-10,0,0]){
+        rotate([0,0,90]){
+           segment();
+        }
     }
     
+    
+    // 2
+   
+    translate([0,190,0]){
+        segment();
+    }
+    
+    
+    translate([190,0,0]){
+        rotate([0,0,90]){
+           segment();
+        }
+    }
+    
+     translate([10,0,0]){
+        rotate([0,0,90]){
+           segment();
+        }
+    }
+    
+    
+    // 3
+   
+    translate([0,-190,0]){
+        segment();
+    }
+    
+    
+    translate([190,0,0]){
+        rotate([0,0,-90]){
+           segment();
+        }
+    }
+    
+     translate([10,0,0]){
+        rotate([0,0,-90]){
+           segment();
+        }
+    }
+    
+    
+    // 3
+   
+    translate([-190,-190,0]){
+        segment();
+    }
+    
+    
+    translate([-190,0,0]){
+        rotate([0,0,-90]){
+           segment();
+        }
+    }
+    
+     translate([-10,0,0]){
+        rotate([0,0,-90]){
+           segment();
+        }
+    }
     
     
     //---------
      
     
+    
+    
+    translate([-200,200,0]){
+        cube(size=[40,40,height_diff],center=true);
+    }
+    
+    translate([200,200,0]){
+        cube(size=[40,40,height_diff],center=true);
+    }
+    
+    translate([200,-200,0]){
+        cube(size=[40,40,height_diff],center=true);
+    }
+    
+    translate([-200,-200,0]){
+        cube(size=[40,40,height_diff],center=true);
+    }
     
 
 
