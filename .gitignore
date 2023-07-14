@@ -4,6 +4,7 @@ __pycache__
 /.idea/
 
 /.env
+/.env_sim
 /boxbot/install/
 /boxbot/build/
 /boxbot/log/

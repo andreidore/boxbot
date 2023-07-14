@@ -18,6 +18,7 @@ def main():
 
     print("Start boxbot.")
     print("ENV:", os.getenv("ENV", "PROD"))
+    print("SIM:", os.getenv("SIM", True))
     print(f"Version: {__VERSION__}")
 
     # start manager

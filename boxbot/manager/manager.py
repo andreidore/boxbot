@@ -3,19 +3,27 @@ import os
 from multiprocessing import Process
 
 import zmq
-from setproctitle import setproctitle
+from setproctitle import setproctitle  # type: ignore
 
 
 class Manager:
     managed_process = {
-        #"boxbot_controller": "boxbot.controller.controller",
-        #"boxbot_board": "boxbot.board.board",
+        # "boxbot_controller": "boxbot.controller.controller",
+        # "boxbot_board": "boxbot.board.board",
         "boxbot_navigation": "boxbot.navigation.navigation",
         "boxbot_vision": "boxbot.vision.vision",
-        #"boxbot_ui": "boxbot.ui.ui",
+        # "boxbot_ui": "boxbot.ui.ui",
         "boxbot_web": "boxbot.web.web",
         # "planing": "boxbot.planing.plan",
     }
+
+    managed_process_sim = {
+        # "boxbot_controller": "boxbot.controller.controller",
+        "boxbot_board": "boxbot.board.board",
+
+    }
+
+    current_managed_process = {}
 
     running = {}
 
@@ -28,11 +36,17 @@ class Manager:
         print("Start manager")
 
         if os.getenv("NO_PROCESS_MANAGER") is None:
-            for process_name in self.managed_process:
+
+            if os.getenv("SIM"):
+                self.current_managed_process = self.managed_process_sim
+            else:
+                self.current_managed_process = self.managed_process
+
+            for process_name in self.current_managed_process:
                 print("Launch process: " + process_name)
 
                 process = Process(name=process_name, target=_launch,
-                                  args=(process_name, self.managed_process[process_name]))
+                                  args=(process_name, self.current_managed_process[process_name]))
 
                 process.start()
 

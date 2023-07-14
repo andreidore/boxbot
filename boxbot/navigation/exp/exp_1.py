@@ -10,6 +10,7 @@ def display(level_map, robot_x, robot_y, robot_theta):
     level_map = cv2.cvtColor(level_map, cv2.COLOR_GRAY2BGR)
 
     robot_image = np.zeros_like(level_map)
+    height, width = robot_image.shape[:2]
 
     cv2.rectangle(robot_image, (robot_x, robot_y), (robot_x + ROBOT_SIZE, robot_y + ROBOT_SIZE), (0, 0, 255), 2)
 
@@ -19,6 +20,11 @@ def display(level_map, robot_x, robot_y, robot_theta):
     cv2.line(robot_image, p1, p2,
              (0, 0, 255),
              2)
+
+    rotate_matrix = cv2.getRotationMatrix2D(center=p1, angle=-robot_theta, scale=1)
+
+    # rotate the image using cv2.warpAffine
+    robot_image = cv2.warpAffine(src=robot_image, M=rotate_matrix, dsize=(width, height))
 
     img2gray = cv2.cvtColor(robot_image, cv2.COLOR_BGR2GRAY)
     ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
@@ -76,9 +82,11 @@ def main():
         if k == 0:
             forward = 5
         elif k == 3:
-            turn = 25
+            turn = 10
         elif k == 2:
-            turn = -25
+            turn = -10
+
+
 
 
         robot_x, robot_y, robot_theta = move_robot(robot_x, robot_y, robot_theta, forward, turn)

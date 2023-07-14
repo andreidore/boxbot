@@ -1,0 +1,5 @@
+setproctitle==1.2.3
+pyzmq==25.1.0
+opencv-python
+
+mypy==1.4.1
