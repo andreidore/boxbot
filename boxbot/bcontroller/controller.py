@@ -3,7 +3,7 @@ import time
 import zmq
 
 from boxbot.config import BOARD_ZMQ_PORT, COMMAND_ZMQ_PORT, ZMQ_HOST
-from boxbot.controller.state.idle import IdleState
+from boxbot.bcontroller.state.idle import IdleState
 from boxbot.fsm.fsm import FiniteStateMachine
 
 

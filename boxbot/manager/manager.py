@@ -19,7 +19,7 @@ class Manager:
 
     managed_process_sim = {
         # "boxbot_controller": "boxbot.controller.controller",
-        "boxbot_board": "boxbot.board.board",
+        "boxbot_board_sim": "boxbot.simulator.board.board",
 
     }
 

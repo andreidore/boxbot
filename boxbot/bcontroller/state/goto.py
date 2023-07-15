@@ -16,5 +16,5 @@ class GotoState(State):
         self.index += 1
 
         if self.index == 10:
-            from boxbot.controller.state.idle import IdleState
+            from boxbot.bcontroller.state.idle import IdleState
             fsm.transition_to(IdleState())

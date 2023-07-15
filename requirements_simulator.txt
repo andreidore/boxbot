@@ -1,5 +1,8 @@
 setproctitle==1.2.3
 pyzmq==25.1.0
 opencv-python
+filterpy==1.4.5
+
+pygame
 
 mypy==1.4.1
