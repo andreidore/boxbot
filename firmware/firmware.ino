@@ -1,199 +1,56 @@
+#include "Motoron.h"
 
-int const BUZZER = 4;
+MotoronI2C mc;
 
-//  Motor A
+void setup()
+{
+  Wire.begin();
 
-int const ENA = 10;
+  // Reset the controller to its default settings, then disable
+  // CRC.  The bytes for each of these commands are shown here
+  // in case you want to implement them on your own without
+  // using the library.
+  mc.reinitialize();    // Bytes: 0x96 0x74
+  mc.disableCrc();      // Bytes: 0x8B 0x04 0x7B 0x43
 
-int const INA = 12;
+  // Clear the reset flag, which is set after the controller
+  // reinitializes and counts as an error.
+  mc.clearResetFlag();  // Bytes: 0xA9 0x00 0x04
 
-//  Motor B
+  // By default, the Motoron is configured to stop the motors if
+  // it does not get a motor control command for 1500 ms.  You
+  // can uncomment a line below to adjust this time or disable
+  // the timeout feature.
+  // mc.setCommandTimeoutMilliseconds(1000);
+  // mc.disableCommandTimeout();
 
-int const ENB = 11;
+  // Configure motor 1
+  mc.setMaxAcceleration(1, 140);
+  mc.setMaxDeceleration(1, 300);
 
-int const INB = 13;
+  // Configure motor 2
+  mc.setMaxAcceleration(2, 200);
+  mc.setMaxDeceleration(2, 300);
 
-
-int const MIN_SPEED = 27;   // Set to minimum PWM value that will make motors turn
-
-int const ACCEL_DELAY = 50; // delay between steps when ramping motor speed up or down.
-
-
-
-void setup() {
-
-  pinMode(LED_BUILTIN, OUTPUT);
-
-
-  pinMode(ENA, OUTPUT);  // set all the motor control pins to outputs
-
-  pinMode(ENB, OUTPUT);
-
-  pinMode(INA, OUTPUT);
-
-  pinMode(INB, OUTPUT);
-
-  pinMode(BUZZER, OUTPUT);
-
-  Serial.begin(9600);  // Set comm speed for serial monitor messages
 
   delay(5000);
-}
-
-void loop() {
-  
-    Motor('C', 'F', 2);   
-
-  delay(3000);
-
-  
-
-  // Run both motors in Reverse at 75% power but sound beeper first
-
-  Motor('C', 'F', 0);  // Stop motors
-
-  delay(1000);
-
-  digitalWrite(BUZZER,HIGH);delay(500);digitalWrite(BUZZER,LOW); 
-
-  delay(500);
-
-  digitalWrite(BUZZER,HIGH);delay(500);digitalWrite(BUZZER,LOW); 
-
-  delay(1000);
-
-  Motor('C', 'R', 2);  // Run motors forward at 75%
-
- delay(3000); 
-
-  
-
-  // now run motors in opposite directions at same time at 50% speed
-
-  Motor('A', 'F', 2);
-
-  Motor ('B', 'R', 2);
-
-  delay(3000);
-
-  
-
-  // now turn off both motors
-
-  Motor('C', 'F', 0);  
-
-  delay(3000);
 
 
 }
 
-
-
-void Motor(char mot, char dir, int speed)
-
+void loop()
 {
-
-  // remap the speed from range 0-100 to 0-255
-
-  int newspeed;
-
-  if (speed == 0)
-
-    newspeed = 0;  // Don't remap zero, but remap everything else.
-
+  if (millis() & 2048)
+  {
+    mc.setSpeed(1, 800);
+     mc.setSpeed(2, -800);
+  }
   else
-
-    newspeed = map(speed, 1, 100, MIN_SPEED, 255);
-
-
-
-  switch (mot) {
-
-    case 'A':  // Controlling Motor A
-
-      if (dir == 'F') {
-
-        digitalWrite(INA, HIGH);
-
-      }
-
-      else if (dir == 'R') {
-
-        digitalWrite(INB, LOW);
-      }
-
-      analogWrite(ENA, newspeed);
-
-      break;
-
-
-
-    case 'B':  // Controlling Motor B
-
-      if (dir == 'F') {
-
-        digitalWrite(INB, HIGH);
-
-      }
-
-      else if (dir == 'R') {
-
-        digitalWrite(INB, LOW);
-      }
-
-      analogWrite(ENB, newspeed);
-
-      break;
-
-
-
-    case 'C':  // Controlling Both Motors
-
-      if (dir == 'F') {
-
-        digitalWrite(INA, HIGH);
-
-        digitalWrite(INB, HIGH);
-
-      }
-
-      else if (dir == 'R') {
-
-        digitalWrite(INA, LOW);
-
-        digitalWrite(INB, LOW);
-      }
-
-      analogWrite(ENA, newspeed);
-
-      analogWrite(ENB, newspeed);
-
-      break;
+  {
+    mc.setSpeed(1, -800);
+    mc.setSpeed(2, 800);
   }
 
-  // Send what we are doing with the motors out to the Serial Monitor.
+ 
 
-
-
-  Serial.print("Motor: ");
-
-  if (mot == 'C')
-
-    Serial.print("Both");
-
-  else
-
-    Serial.print(mot);
-
-  Serial.print("t Direction: ");
-
-  Serial.print(dir);
-
-  Serial.print("t Speed: ");
-
-  Serial.print(speed);
-
-  Serial.print("t Mapped Speed: ");
-
-  Serial.println(newspeed);
 }

@@ -9,6 +9,8 @@ __pycache__
 /boxbot/build/
 /boxbot/log/
 
+.mypy_cache
+
 
 # models
 yolov8s.pt

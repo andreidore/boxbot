@@ -11,8 +11,8 @@ WorldInfo {
   title "MyBot"
 }
 Viewpoint {
-  orientation 0.17413621692501668 -0.5116516337573849 -0.8413615059107722 5.517676853175317
-  position -0.6484600890592587 -0.5605657796345186 0.4225002449546345
+  orientation 0.18950772468982477 -0.45076683818432245 -0.872293574363697 5.3879638592748105
+  position -1.1550256416029157 -1.1904201442227702 0.8049089809588389
 }
 TexturedBackground {
 }
@@ -116,7 +116,7 @@ DEF PINK_BOX Solid {
 }
 Robot {
   translation 0.39383985757714407 0.4373125289111766 0
-  rotation 0 0 1 39.9415649979648
+  rotation 0 0 1 627.8215798311079
   children [
     Pose {
       translation 0 0 0.0415
@@ -137,7 +137,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 213.90496292317147
+        position -996.6140770768918
         axis 0 1 0
         anchor 0 0 0.025
       }
@@ -151,8 +151,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.045 0.025
-        rotation -0.002191162265373181 0.0021911985258426603 -0.9999951987169473 1.5708008676345373
+        translation 0 0.045000000000000005 0.025
+        rotation 0.6594518074141941 -0.6594519921035852 0.36089663867756616 3.8342910187056236
         children [
           DEF WHEEL Pose {
             rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
@@ -177,7 +177,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 390.1113599999894
+        position 1600.6303999999523
         axis 0 1 0
         anchor 0 0 0.025
       }
@@ -191,8 +191,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0 -0.044999999999999984 0.025
-        rotation -0.3159200952736537 0.3159200722096565 -0.8946446229522262 1.6818958663175498
+        translation 0 -0.04499999999999998 0.025
+        rotation -0.5541326186502575 0.5541325660275742 0.6211876851769556 4.253298932741633
         children [
           USE WHEEL
         ]
