@@ -2,7 +2,7 @@ import time
 
 import zmq
 
-from boxbot.config import BOARD_ZMQ_PORT, ZMQ_HOST
+from boxbot.config import BOARD_MOTOR_VELOCITY_ENDPOINT
 
 
 class Board():
@@ -11,16 +11,28 @@ class Board():
         print("Init board.")
 
         self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.PUB)
-
-        self.socket.bind("tcp://{}:{}".format(ZMQ_HOST, BOARD_ZMQ_PORT))
+        self.motor_velocity_socket = self.context.socket(zmq.REQ)
+        self.motor_velocity_socket.bind(BOARD_MOTOR_VELOCITY_ENDPOINT)
 
     def start(self):
         print("Start board.")
 
         while True:
-            self.socket.send_string("Hello from board.")
-            time.sleep(1)
+
+            # message = self.board_socket.recv_string()
+            # print("Message: " + message)
+
+            ## command
+            try:
+                command_message = self.motor_velocity_socket.recv(zmq.NOBLOCK)
+                self.motor_velocity_socket.send_string("ACK")
+
+                print(command_message)
+            except zmq.Again:
+                # print("No command received")
+                pass
+
+            time.sleep(0.1)
 
 
 def main():
