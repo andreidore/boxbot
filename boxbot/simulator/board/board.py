@@ -39,7 +39,7 @@ class Board():
                 motor_velocity = MotorVelocity()
                 motor_velocity.ParseFromString(motor_velocity_message)
 
-                print(motor_velocity)
+                #print(motor_velocity)
 
                 left_motor_velocity = motor_velocity.left
                 right_motor_velocity = motor_velocity.right

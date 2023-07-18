@@ -35,14 +35,14 @@ def main():
                 if event.key == pygame.K_LEFT:
                     print("LEFT key pressed")
 
-                    left = 10
-                    right = -10
+                    left = -10
+                    right = 10
 
                 elif event.key == pygame.K_RIGHT:
                     print("RIGHT key pressed")
 
-                    left = -10
-                    right = 10
+                    left = 10
+                    right = -10
 
 
 
@@ -60,7 +60,7 @@ def main():
 
         socket.send(motor_speed.SerializeToString())  # Send the command
         message = socket.recv()  # Wait for the reply from the server
-        print(f"Received reply [ {message} ]")
+        #print(f"Received reply [ {message} ]")
 
 
 if __name__ == "__main__":

@@ -5,5 +5,6 @@ opencv-python
 filterpy==1.4.5
 
 pygame
+pygame-gui==0.6.9
 
 mypy==1.4.1

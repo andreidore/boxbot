@@ -120,8 +120,6 @@ class Vision():
                 #    print(detection)
 
 
-                
-                
                 self.video_output_detect.Render(frame)
 
             
