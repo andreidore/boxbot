@@ -1,6 +1,6 @@
 """
 
-Navigate app for controlling the robot.
+Navigator app for controlling the robot.
 
 """
 
@@ -25,10 +25,10 @@ from boxbot.message.image_message_pb2 import ImageMessage # pylint: disable = no
 from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage # pylint: disable = no-name-in-module
 
 
-class NavigateApp(App):
+class NavigatorApp(App):
     """
 
-    Navigate app for controlling the robot.
+    Navigator app for controlling the robot.
 
     """
 
@@ -163,4 +163,4 @@ class NavigateApp(App):
 
 
 if __name__ == '__main__':
-    NavigateApp().run()
+    NavigatorApp().run()
