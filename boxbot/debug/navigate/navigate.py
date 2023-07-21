@@ -1,3 +1,9 @@
+"""
+
+Navigate app for controlling the robot.
+
+"""
+
 import time
 from functools import partial
 from threading import Thread
@@ -77,14 +83,18 @@ class NavigateApp(App):
     def _build_navigate_menu(self):
         layout = GridLayout(cols=3)
 
-        left_button = Button(text='Left', on_press=self._left_button_on_press, on_release=self._left_button_on_release)
+        left_button = Button(text='Left',
+                             on_press=self._left_button_on_press,
+                             on_release=self._left_button_on_release)
         layout.add_widget(left_button)
 
         forward_button = Button(text='Forward',
-                                on_press=self._forward_button_on_press, on_release=self._forward_button_on_release)
+                                on_press=self._forward_button_on_press,
+                                on_release=self._forward_button_on_release)
         layout.add_widget(forward_button)
 
-        right_button = Button(text='Right', on_press=self._right_button_on_press,
+        right_button = Button(text='Right',
+                              on_press=self._right_button_on_press,
                               on_release=self._right_button_on_release)
         layout.add_widget(right_button)
 
@@ -124,9 +134,8 @@ class NavigateApp(App):
             image_message = ImageMessage()
             image_message.ParseFromString(message)
 
-            frame = np.frombuffer(image_message.image_bytes, dtype=np.uint8).reshape(image_message.height,
-                                                                                     image_message.width,
-                                                                                     image_message.channels)
+            frame = np.frombuffer(image_message.image_bytes, dtype=np.uint8)
+            frame = frame.reshape(image_message.height, image_message.width, image_message.channels)
 
             Clock.schedule_once(partial(self._update_image_raw, frame), 0)
 
@@ -146,7 +155,7 @@ def _motor_velocity_handler():
         motor_velocity_message.right = right
 
         socket.send(motor_velocity_message.SerializeToString())  # Send the command
-        message = socket.recv()  # Wait for the reply from the server
+        socket.recv()  # Wait for the reply from the server
 
         time.sleep(0.1)
 
