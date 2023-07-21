@@ -2,7 +2,7 @@ import time
 
 import zmq
 
-from boxbot.config import BOARD_MOTOR_VELOCITY_ENDPOINT
+from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE
 
 
 class Board():
@@ -12,7 +12,7 @@ class Board():
 
         self.context = zmq.Context()
         self.motor_velocity_socket = self.context.socket(zmq.REQ)
-        self.motor_velocity_socket.bind(BOARD_MOTOR_VELOCITY_ENDPOINT)
+        self.motor_velocity_socket.bind(BOARD_MOTOR_VELOCITY_SERVICE)
 
     def start(self):
         print("Start board.")

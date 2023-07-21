@@ -13,10 +13,13 @@ VISION_ZMQ_PORT = "5004"
 # Subscribers
 NAVIGATION_ZMQ_PORT = "5002"
 
-VISION_ENDPOINT = "tcp://{}:5004".format(ZMQ_HOST, VISION_ZMQ_PORT)
+# vision
+VISION_ENDPOINT = "tcp://{}:5004".format(ZMQ_HOST)
+
+VISION_IMAGE_TOPIC = "tcp://{}:5001".format(ZMQ_HOST)
 
 # Board
-BOARD_MOTOR_VELOCITY_ENDPOINT = "tcp://{}:5010".format(ZMQ_HOST)
+BOARD_MOTOR_VELOCITY_SERVICE = "tcp://{}:5010".format(ZMQ_HOST)
 
 ## camera
 

@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package boxbot.message;
 
-message MotorVelocity {
+message MotorVelocityMessage {
   required int32 right = 1;
   required int32 left = 2;
 }

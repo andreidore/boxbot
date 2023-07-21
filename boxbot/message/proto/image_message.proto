@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package video;
+
+message ImageMessage {
+    required int32 width = 1;
+    required int32 height = 2;
+    required int32 channels = 3;
+
+    required bytes image_bytes = 4;
+}
