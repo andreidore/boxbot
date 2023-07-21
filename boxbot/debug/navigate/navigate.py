@@ -4,6 +4,7 @@ Navigate app for controlling the robot.
 
 """
 
+import queue
 import time
 from functools import partial
 from threading import Thread
@@ -13,72 +14,68 @@ import numpy as np
 import zmq
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.graphics.texture import Texture
+from kivy.graphics.texture import Texture # pylint: disable = no-name-in-module
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 
 from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, VISION_IMAGE_TOPIC
-from boxbot.message.image_message_pb2 import ImageMessage
-from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage
-
-context = zmq.Context()
-
-left = 0
-right = 0
+from boxbot.message.image_message_pb2 import ImageMessage # pylint: disable = no-name-in-module
+from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage # pylint: disable = no-name-in-module
 
 
 class NavigateApp(App):
+    """
+
+    Navigate app for controlling the robot.
+
+    """
 
     def __init__(self):
         super().__init__()
+
+        self.context = zmq.Context()
+
         self.image_raw = None
+
+        self.motor_velocity_queue = queue.Queue()
 
         self.image_raw_thread = Thread(target=self._image_raw_callback, args=())
         self.image_raw_thread.start()
 
-    def _left_button_on_press(self, button):
+        self.motor_velocity_thread = Thread(target=self._motor_velocity_callback, args=())
+        self.motor_velocity_thread.start()
+
+    def _left_button_on_press(self, _):
         print("Left button pressed")
 
-        global left, right
-        left = -10
-        right = 10
+        self.motor_velocity_queue.put((-10, 10))
 
-    def _left_button_on_release(self, button):
+    def _left_button_on_release(self, _):
         print("Left button pressed")
 
-        global left, right
-        left = 0
-        right = 0
+        self.motor_velocity_queue.put((0, 0))
 
-    def _forward_button_on_press(self, button):
+    def _forward_button_on_press(self, _):
         print("Forward button pressed")
 
-        global left, right
-        left = 10
-        right = 10
+        self.motor_velocity_queue.put((10, 10))
 
-    def _forward_button_on_release(self, button):
+    def _forward_button_on_release(self, _):
         print("Forward button released")
 
-        global left, right
-        left = 0
-        right = 0
+        self.motor_velocity_queue.put((0, 0))
 
-    def _right_button_on_press(self, button):
-        print("Right button pressed", button)
+    def _right_button_on_press(self, _):
+        print("Right button pressed")
 
-        global left, right
-        left = 10
-        right = -10
+        self.motor_velocity_queue.put((10, -10))
 
-    def _right_button_on_release(self, button):
-        print("Right button released", button)
+    def _right_button_on_release(self, _):
+        print("Right button released")
 
-        global left, right
-        left = 0
-        right = 0
+        self.motor_velocity_queue.put((0, 0))
 
     def _build_navigate_menu(self):
         layout = GridLayout(cols=3)
@@ -109,10 +106,10 @@ class NavigateApp(App):
 
         return root
 
-    def _update_image_raw(self, image, dt):
+    def _update_image_raw(self, image, _):
         print(image.shape)
 
-        buf = cv2.flip(image, 0).tostring()
+        buf = cv2.flip(image, 0).tostring()  # pylint: disable=maybe-no-member
 
         texture = Texture.create(size=(image.shape[1], image.shape[0]))
         texture.blit_buffer(buf, colorfmt='rgb', bufferfmt='ubyte')
@@ -121,7 +118,7 @@ class NavigateApp(App):
     def _image_raw_callback(self):
         print("Start image raw handler thread")
 
-        socket = context.socket(zmq.SUB)
+        socket = self.context.socket(zmq.SUB)
         socket.connect(VISION_IMAGE_TOPIC)  # Connect to the server
         socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
@@ -139,29 +136,31 @@ class NavigateApp(App):
 
             Clock.schedule_once(partial(self._update_image_raw, frame), 0)
 
+    def _motor_velocity_callback(self):
+        print("Start motor velocity handler thread")
 
-def _motor_velocity_handler():
-    print("Start motor velocity handler thread")
+        socket = self.context.socket(zmq.REQ)  # REQ stands for REQuest, to represent a client
+        socket.connect(BOARD_MOTOR_VELOCITY_SERVICE)  # Connect to the server
 
-    socket = context.socket(zmq.REQ)  # REQ stands for REQuest, to represent a client
-    socket.connect(BOARD_MOTOR_VELOCITY_SERVICE)  # Connect to the server
+        left = 0
+        right = 0
 
-    # left = 0
-    # right = 0
+        while True:
 
-    while True:
-        motor_velocity_message = MotorVelocityMessage()
-        motor_velocity_message.left = left
-        motor_velocity_message.right = right
+            try:
+                left, right = self.motor_velocity_queue.get(block=False)
+            except queue.Empty:
+                pass
 
-        socket.send(motor_velocity_message.SerializeToString())  # Send the command
-        socket.recv()  # Wait for the reply from the server
+            motor_velocity_message = MotorVelocityMessage()
+            motor_velocity_message.left = left
+            motor_velocity_message.right = right
 
-        time.sleep(0.1)
+            socket.send(motor_velocity_message.SerializeToString())  # Send the command
+            socket.recv()  # Wait for the reply from the server
+
+            time.sleep(0.1)
 
 
 if __name__ == '__main__':
-    motor_velocity = Thread(target=_motor_velocity_handler, args=())
-    motor_velocity.start()
-
     NavigateApp().run()
