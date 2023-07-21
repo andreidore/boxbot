@@ -8,9 +8,9 @@ import numpy as np
 import zmq
 
 from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, VISION_IMAGE_TOPIC
-from boxbot.message.image_message_pb2 import ImageMessage
-from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage
-from controller import Robot
+from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
+from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage  # pylint: disable = no-name-in-module
+from controller import Robot  # pylint: disable=import-error
 
 TIME_STEP = 64
 
