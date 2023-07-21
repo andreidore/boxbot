@@ -12,14 +12,15 @@ Connection with Webots was inspired by this [project](https://github.com/joanger
 
 ## TODO
 
-* tracking peoples in video
-* depth estimation in vides
-* odmetry wheel
-* odmetry imu
-* tracking robot in 2D
-* fusion odometry and tracking
 * localization robot in 2D
 * map
+* tracking people in video
+* depth estimation in videos
+* odometry wheel
+* odometry imu
+* tracking robot in 2D
+* fusion odometry and tracking
+
 
 ## Video
 
