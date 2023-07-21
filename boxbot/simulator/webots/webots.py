@@ -1,3 +1,9 @@
+"""
+
+Webots controller  for the boxbot.
+
+"""
+
 import numpy as np
 import zmq
 
@@ -6,8 +12,15 @@ from boxbot.message.image_message_pb2 import ImageMessage
 from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage
 from controller import Robot
 
+TIME_STEP = 64
 
-class Webots():
+
+class Webots:  # pylint: disable=too-few-public-methods
+    """
+
+    Webots controller for the boxbot.
+
+    """
 
     def __init__(self):
         print("Init board simulator.")
@@ -28,14 +41,14 @@ class Webots():
         self.camera = self.robot.getDevice("camera")
 
     def start(self):
+        """
+        Start the webots controller.
+
+        :return:
+        """
         print("Start board sim.")
 
         self.camera.enable(50)
-
-        F = 2.0  # frequency 2 Hz
-        t = 0.0  # elapsed simulation time
-
-        TIME_STEP = 64
 
         left_motor_velocity = 0
         right_motor_velocity = 0
@@ -79,6 +92,12 @@ class Webots():
 
 
 def main():
+    """
+
+    Main function.
+
+    :return:
+    """
     Webots().start()
 
 

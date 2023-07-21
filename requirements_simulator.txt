@@ -7,4 +7,5 @@ filterpy==1.4.5
 
 kivy==2.2.1
 
+pylint==2.17.4
 mypy==1.4.1
