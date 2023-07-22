@@ -9,20 +9,20 @@ import time
 from functools import partial
 from threading import Thread
 
-import cv2
+import cv2 # pylint: disable = no-name-in-module
 import numpy as np
 import zmq
-from kivy.app import App
-from kivy.clock import Clock
-from kivy.graphics.texture import Texture # pylint: disable = no-name-in-module
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.image import Image
+from kivy.app import App  # pylint: disable = no-name-in-module
+from kivy.clock import Clock  # pylint: disable = no-name-in-module
+from kivy.graphics.texture import Texture  # pylint: disable = no-name-in-module
+from kivy.uix.boxlayout import BoxLayout  # pylint: disable = no-name-in-module
+from kivy.uix.button import Button  # pylint: disable = no-name-in-module
+from kivy.uix.gridlayout import GridLayout  # pylint: disable = no-name-in-module
+from kivy.uix.image import Image  # pylint: disable = no-name-in-module
 
 from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, VISION_IMAGE_TOPIC
-from boxbot.message.image_message_pb2 import ImageMessage # pylint: disable = no-name-in-module
-from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage # pylint: disable = no-name-in-module
+from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
+from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage  # pylint: disable = no-name-in-module
 
 
 class NavigatorApp(App):
@@ -98,6 +98,12 @@ class NavigatorApp(App):
         return layout
 
     def build(self):
+        """
+        Build Kivy app.
+
+        :return:
+        """
+
         root = BoxLayout(orientation='vertical')
         root.add_widget(self._build_navigate_menu())
 
