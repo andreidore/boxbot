@@ -1,12 +1,23 @@
+"""
+
+Manager service
+
+"""
+
 import importlib
 import os
 from multiprocessing import Process
 
 import zmq
-from setproctitle import setproctitle  # type: ignore
+from setproctitle import setproctitle  # type: ignore   # pylint: disable = no-name-in-module
 
 
-class Manager:
+class Manager:  # pylint: disable=too-few-public-methods
+    """
+
+    Implement Manager service. It will start all the services
+
+    """
     managed_process = {
         # "boxbot_controller": "boxbot.controller.controller",
         # "boxbot_board": "boxbot.board.board",
@@ -18,14 +29,13 @@ class Manager:
     }
 
     managed_process_sim = {
-        # "boxbot_controller": "boxbot.controller.controller",
         "boxbot_board_sim": "boxbot.simulator.webots.webots",
 
     }
 
-    current_managed_process = {}
+    current_managed_process: dict[str, str] = {}
 
-    running = {}
+    running: dict[str, Process] = {}
 
     def __init__(self):
         print("Init manager")
@@ -33,6 +43,12 @@ class Manager:
         self.context = zmq.Context()
 
     def start(self):
+        """
+
+        Start manager service
+
+        :return:
+        """
         print("Start manager")
 
         if os.getenv("NO_PROCESS_MANAGER") is None:
@@ -42,11 +58,11 @@ class Manager:
             else:
                 self.current_managed_process = self.managed_process
 
-            for process_name in self.current_managed_process:
+            for process_name, process_path in self.current_managed_process.items():
                 print("Launch process: " + process_name)
 
                 process = Process(name=process_name, target=_launch,
-                                  args=(process_name, self.current_managed_process[process_name]))
+                                  args=(process_name, process_path))
 
                 process.start()
 
