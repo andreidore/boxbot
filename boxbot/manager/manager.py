@@ -30,6 +30,7 @@ class Manager:  # pylint: disable=too-few-public-methods
 
     managed_process_sim = {
         "boxbot_board_sim": "boxbot.simulator.webots.webots",
+        "boxbot_navigation_landmark": "boxbot.navigation.landmark.landmark",
 
     }
 

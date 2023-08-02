@@ -4,6 +4,7 @@ pyzmq==25.1.0
 opencv-python
 opencv-contrib-python
 filterpy==1.4.5
+python-dotenv==1.0.0
 
 kivy==2.2.1
 

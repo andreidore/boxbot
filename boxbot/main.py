@@ -3,7 +3,8 @@ Main file of boxbot.
 """
 import os
 
-from setproctitle import setproctitle
+from dotenv import load_dotenv
+from setproctitle import setproctitle # pylint: disable = no-name-in-module
 
 from boxbot.config import __VERSION__
 from boxbot.manager.manager import main as manager_main
@@ -16,10 +17,12 @@ def main():
     """
     setproctitle("boxbot_manager")
 
+    load_dotenv("properties_simulator.env")
+
     print("Start boxbot.")
-    print("ENV:", os.getenv("ENV", "PROD"))
-    print("SIM:", os.getenv("SIM", True))
     print(f"Version: {__VERSION__}")
+    print("ENV:", os.getenv("ENV", "PROD"))
+    print("SIM:", os.getenv("SIM"))
 
     # start manager
     manager_main()

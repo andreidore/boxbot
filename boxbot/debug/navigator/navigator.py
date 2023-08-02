@@ -9,7 +9,7 @@ import time
 from functools import partial
 from threading import Thread
 
-import cv2 # pylint: disable = no-name-in-module
+import cv2  # pylint: disable = no-name-in-module
 import numpy as np
 import zmq
 from kivy.app import App  # pylint: disable = no-name-in-module
@@ -20,7 +20,7 @@ from kivy.uix.button import Button  # pylint: disable = no-name-in-module
 from kivy.uix.gridlayout import GridLayout  # pylint: disable = no-name-in-module
 from kivy.uix.image import Image  # pylint: disable = no-name-in-module
 
-from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, VISION_IMAGE_TOPIC
+from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, NAVIGATION_LANDMARK_IMAGE_TOPIC
 from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
 from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage  # pylint: disable = no-name-in-module
 
@@ -113,7 +113,7 @@ class NavigatorApp(App):
         return root
 
     def _update_image_raw(self, image, _):
-        print(image.shape)
+        #print(image.shape)
 
         buf = cv2.flip(image, 0).tostring()  # pylint: disable=maybe-no-member
 
@@ -125,7 +125,7 @@ class NavigatorApp(App):
         print("Start image raw handler thread")
 
         socket = self.context.socket(zmq.SUB)
-        socket.connect(VISION_IMAGE_TOPIC)  # Connect to the server
+        socket.connect(NAVIGATION_LANDMARK_IMAGE_TOPIC)  # Connect to the server
         socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
         # left = 0
@@ -139,6 +139,8 @@ class NavigatorApp(App):
 
             frame = np.frombuffer(image_message.image_bytes, dtype=np.uint8)
             frame = frame.reshape(image_message.height, image_message.width, image_message.channels)
+
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # pylint: disable = no-member
 
             Clock.schedule_once(partial(self._update_image_raw, frame), 0)
 

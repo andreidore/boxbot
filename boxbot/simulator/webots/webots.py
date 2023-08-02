@@ -4,6 +4,7 @@ Webots controller  for the boxbot.
 
 """
 
+import cv2
 import numpy as np
 import zmq
 
@@ -81,6 +82,7 @@ class Webots:  # pylint: disable=too-few-public-methods
 
             frame = self.camera.getImageArray()
             frame = np.array(frame, dtype=np.uint8)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) # pylint: disable = no-member
             # print(frame.shape)
             image_message = ImageMessage()
             image_message.image_bytes = frame.tobytes()
