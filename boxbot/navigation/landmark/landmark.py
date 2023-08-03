@@ -5,11 +5,10 @@ Landmark navigation service.
 """
 
 import cv2  # pylint: disable = no-name-in-module
-import numpy as np
 import zmq
 
 from boxbot.config import VISION_IMAGE_TOPIC, NAVIGATION_LANDMARK_IMAGE_TOPIC
-from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
+from boxbot.message.messages import decode_image, encode_image
 
 
 class Landmark:  # pylint: disable=too-few-public-methods
@@ -50,33 +49,24 @@ class Landmark:  # pylint: disable=too-few-public-methods
         while True:
             message = self.vision_image_socket.recv()  # Wait for the reply from the server
 
-            image_message = ImageMessage()
-            image_message.ParseFromString(message)
+            # print(type(message))
 
-            frame = np.frombuffer(image_message.image_bytes,  # pylint disable = c-extension-no-member
-                                  dtype=np.uint8)
-            frame = frame.reshape(image_message.height, image_message.width, image_message.channels)
+            frame = decode_image(message)
+
             # print(frame.shape)
 
             # print(gray_frame.shape)
 
-            corners, ids, _ = cv2.aruco.detectMarkers(frame, self.dictionary, # pylint: disable = c-extension-no-member
+            corners, ids, _ = cv2.aruco.detectMarkers(frame, self.dictionary,  # pylint: disable = c-extension-no-member
                                                       parameters=self.parameters)
 
-            if ids:
-                print(f"Found {len(ids)} markers.")
+            if ids is not None:
                 print(ids)
 
             # Draw rejected markers:
-            aruco_frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids) # pylint: disable = c-extension-no-member
+            aruco_frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)  # pylint: disable = c-extension-no-member
 
-            output_image_message = ImageMessage()
-            output_image_message.image_bytes = aruco_frame.tobytes()
-            output_image_message.width = aruco_frame.shape[1]
-            output_image_message.height = aruco_frame.shape[0]
-            output_image_message.channels = aruco_frame.shape[2]
-
-            self.landmark_image_socket.send(output_image_message.SerializeToString())
+            self.landmark_image_socket.send(encode_image(aruco_frame))
 
 
 def main():
