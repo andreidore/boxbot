@@ -9,7 +9,7 @@ import numpy as np
 import zmq
 
 from boxbot.config import BOARD_MOTOR_VELOCITY_SERVICE, VISION_IMAGE_TOPIC
-from boxbot.message.messages import encode_image
+from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
 from boxbot.message.motor_velocity_message_pb2 import MotorVelocityMessage  # pylint: disable = no-name-in-module
 from controller import Robot  # pylint: disable=import-error
 
@@ -85,9 +85,25 @@ class Webots:  # pylint: disable=too-few-public-methods
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # pylint: disable = no-member
             # print(frame.shape)
 
-            frame_bytes = encode_image(frame)
+            image_message = ImageMessage()
+            image_message.image_bytes = frame.tobytes()
+            image_message.width = frame.shape[1]
+            image_message.height = frame.shape[0]
+            image_message.channels = frame.shape[2]
 
-            self.image_socket.send(frame_bytes)
+            k = np.array([
+                self.camera.getFocalLength(), 0.0, self.camera.getWidth() / 2,
+                0.0, self.camera.getFocalLength(), self.camera.getHeight() / 2,
+                0.0, 0.0, 1.0
+            ])
+
+            image_message.k_bytes = k.tobytes()
+
+            d = np.array([0.0, 0.0, 0.0, 0.0, 0.0])
+
+            image_message.d_bytes = d.tobytes()
+
+            self.image_socket.send(image_message.SerializeToString())
 
 
 def main():

@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13image_message.proto\x12\x05video\"T\n\x0cImageMessage\x12\r\n\x05width\x18\x01 \x02(\x05\x12\x0e\n\x06height\x18\x02 \x02(\x05\x12\x10\n\x08\x63hannels\x18\x03 \x02(\x05\x12\x13\n\x0bimage_bytes\x18\x04 \x02(\x0c')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13image_message.proto\x12\x05video\"v\n\x0cImageMessage\x12\r\n\x05width\x18\x01 \x02(\x05\x12\x0e\n\x06height\x18\x02 \x02(\x05\x12\x10\n\x08\x63hannels\x18\x03 \x02(\x05\x12\x13\n\x0bimage_bytes\x18\x04 \x02(\x0c\x12\x0f\n\x07k_bytes\x18\x05 \x01(\x0c\x12\x0f\n\x07\x64_bytes\x18\x06 \x01(\x0c')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,5 +22,5 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _globals['_IMAGEMESSAGE']._serialized_start=30
-  _globals['_IMAGEMESSAGE']._serialized_end=114
+  _globals['_IMAGEMESSAGE']._serialized_end=148
 # @@protoc_insertion_point(module_scope)

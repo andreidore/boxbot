@@ -8,4 +8,9 @@ message ImageMessage {
     required int32 channels = 3;
     required bytes image_bytes = 4;
 
+    optional bytes k_bytes = 5;
+
+    optional bytes d_bytes = 6;
+
+
 }

@@ -5,10 +5,12 @@ Landmark navigation service.
 """
 
 import cv2  # pylint: disable = no-name-in-module
+import numpy as np
 import zmq
 
 from boxbot.config import VISION_IMAGE_TOPIC, NAVIGATION_LANDMARK_IMAGE_TOPIC
-from boxbot.message.messages import decode_image, encode_image
+from boxbot.message.image_message_pb2 import ImageMessage  # pylint: disable = no-name-in-module
+from boxbot.message.messages import get_image_from_message
 
 
 class Landmark:  # pylint: disable=too-few-public-methods
@@ -51,7 +53,10 @@ class Landmark:  # pylint: disable=too-few-public-methods
 
             # print(type(message))
 
-            frame = decode_image(message)
+            image_message = ImageMessage()
+            image_message.ParseFromString(message)
+
+            frame = get_image_from_message(image_message)
 
             # print(frame.shape)
 
@@ -66,7 +71,15 @@ class Landmark:  # pylint: disable=too-few-public-methods
             # Draw rejected markers:
             aruco_frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)  # pylint: disable = c-extension-no-member
 
-            self.landmark_image_socket.send(encode_image(aruco_frame))
+            aruco_image_message = ImageMessage()
+            aruco_image_message.image_bytes = aruco_frame.tobytes()
+            aruco_image_message.width = frame.shape[1]
+            aruco_image_message.height = frame.shape[0]
+            aruco_image_message.channels = frame.shape[2]
+
+            aruco_image_message.k_bytes = image_message.k_bytes
+
+            self.landmark_image_socket.send(aruco_image_message.SerializeToString())
 
 
 def main():

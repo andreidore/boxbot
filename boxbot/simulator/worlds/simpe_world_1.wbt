@@ -11,8 +11,8 @@ WorldInfo {
   title "MyBot"
 }
 Viewpoint {
-  orientation 0.054656756532621 0.27402752664830193 -0.9601674612297315 0.4197744542430766
-  position -0.9900148596675447 -0.260796085984328 0.19848310964222307
+  orientation 0.13128375883467278 0.29030818488032395 -0.947884872997629 0.894600765651633
+  position -0.29818274910838793 0.35180341435857815 0.402017675935555
 }
 TexturedBackground {
 }
@@ -119,9 +119,19 @@ DEF PINK_BOX Solid {
     geometry USE BOX3
   }
 }
+Solid {
+  translation 0 -0.94 0
+  children [
+    Shape {
+      geometry Box {
+        size 0.1 0.1 0.1
+      }
+    }
+  ]
+}
 Robot {
-  translation -0.3756513310367924 -0.15368188583210585 0
-  rotation 0 0 1 -352.05013873791677
+  translation -0.196576439151903 -0.5009380752982152 0
+  rotation 0 0 1 -357.82998894476265
   children [
     Camera {
       translation 0.05 0 0.04
@@ -147,7 +157,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 1404.2844829232115
+        position 1474.9660829232091
         axis 0 1 0
         anchor 0 0 0.025
       }
@@ -162,7 +172,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0 0.04500000000000002 0.025
-        rotation 0.7036291844621761 -0.7036293713161331 0.09905391761235838 3.3390563545215453
+        rotation -0.6247169818330278 0.624717127873204 0.4684625948261901 4.017794696349019
         children [
           DEF WHEEL Pose {
             rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
@@ -187,7 +197,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -33.82975999998669
+        position 13.048960000013322
         axis 0 1 0
         anchor 0 0 0.025
       }
@@ -202,7 +212,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0 -0.04499999999999999 0.025
-        rotation -0.6732273311711902 0.67322726973225 0.3058267546389244 3.7351802732096697
+        rotation -0.2866109887684317 0.28661096841370076 -0.9141708231518564 1.6604140462862664
         children [
           USE WHEEL
         ]
